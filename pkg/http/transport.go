@@ -1,6 +1,9 @@
 package http
 
-import "net/http"
+import (
+	"net/http"
+	"os"
+)
 
 type HeadersTransport struct {
 	roundTripper http.RoundTripper
@@ -25,6 +28,7 @@ func (t *HeadersTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 	if req.Body != nil {
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Accept", "application/json")
+		req.Header.Set("Suture_ID", os.Getenv("SUTURE_ID"))
 	}
 	return t.roundTripper.RoundTrip(req)
 }
