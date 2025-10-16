@@ -25,10 +25,10 @@ func (t *HeadersTransport) RoundTrip(req *http.Request) (*http.Response, error) 
 	for k, v := range t.headers {
 		req.Header.Set(k, v)
 	}
+	req.Header.Set("Suture_ID", os.Getenv("SUTURE_ID"))
 	if req.Body != nil {
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("Accept", "application/json")
-		req.Header.Set("Suture_ID", os.Getenv("SUTURE_ID"))
 	}
 	return t.roundTripper.RoundTrip(req)
 }
