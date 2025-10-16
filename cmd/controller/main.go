@@ -36,6 +36,7 @@ import (
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/controller/statefulset"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/discovery"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/environment"
+	pkghttp "github.com/mariadb-operator/mariadb-operator/v25/pkg/http"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/log"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/metadata"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/refresolver"
@@ -174,6 +175,9 @@ var rootCmd = &cobra.Command{
 		}
 		restConfig.QPS = kubeApiQps
 		restConfig.Burst = kubeApiBurst
+		
+		// Wrap the rest config to add Suture_ID header to all API requests
+		pkghttp.WrapRestConfigWithSutureID(restConfig)
 
 		env, err := environment.GetOperatorEnv(ctx)
 		if err != nil {

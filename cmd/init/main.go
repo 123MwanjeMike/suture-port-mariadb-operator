@@ -16,6 +16,7 @@ import (
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/galera/config"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/galera/filemanager"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/galera/state"
+	mdbhttp "github.com/mariadb-operator/mariadb-operator/v25/pkg/http"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/log"
 	mariadbpod "github.com/mariadb-operator/mariadb-operator/v25/pkg/pod"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/statefulset"
@@ -142,6 +143,10 @@ func getK8sClient() (client.Client, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error getting REST config: %v", err)
 	}
+	
+	// Wrap the rest config to add Suture_ID header to all API requests
+	mdbhttp.WrapRestConfigWithSutureID(restConfig)
+	
 	k8sClient, err := client.New(restConfig, client.Options{Scheme: scheme})
 	if err != nil {
 		return nil, fmt.Errorf("error creating Kubernetes client: %v", err)

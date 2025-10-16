@@ -158,6 +158,10 @@ func getK8sClient() (client.Client, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error getting REST config: %v", err)
 	}
+	
+	// Wrap the rest config to add Suture_ID header to all API requests
+	mdbhttp.WrapRestConfigWithSutureID(restConfig)
+	
 	k8sClient, err := client.New(restConfig, client.Options{Scheme: scheme})
 	if err != nil {
 		return nil, fmt.Errorf("error creating Kubernetes client: %v", err)
