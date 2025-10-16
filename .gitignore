@@ -5,6 +5,10 @@
 *.so
 *.dylib
 
+# Operator binaries
+controller
+mariadb-operator
+
 # Test binary, built with `go test -c`
 *.test
 
