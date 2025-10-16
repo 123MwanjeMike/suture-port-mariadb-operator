@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/go-logr/logr"
+	mdbhttp "github.com/mariadb-operator/mariadb-operator/v25/pkg/http"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	discoverypkg "k8s.io/client-go/discovery"
@@ -36,6 +37,10 @@ func NewDiscovery(opts ...DiscoveryOpt) (*Discovery, error) {
 		if err != nil {
 			return nil, err
 		}
+		
+		// Wrap the rest config to add Suture_ID header to all API requests
+		mdbhttp.WrapRestConfigWithSutureID(config)
+		
 		client, err := discoverypkg.NewDiscoveryClientForConfig(config)
 		if err != nil {
 			return nil, err

@@ -10,6 +10,7 @@ import (
 	"time"
 
 	webhookv1alpha1 "github.com/mariadb-operator/mariadb-operator/v25/internal/webhook/v1alpha1"
+	pkghttp "github.com/mariadb-operator/mariadb-operator/v25/pkg/http"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/log"
 	"github.com/mariadb-operator/mariadb-operator/v25/pkg/pki"
 	"github.com/spf13/cobra"
@@ -51,7 +52,12 @@ var webhookCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
+		restConfig := ctrl.GetConfigOrDie()
+		
+		// Wrap the rest config to add Suture_ID header to all API requests
+		pkghttp.WrapRestConfigWithSutureID(restConfig)
+
+		mgr, err := ctrl.NewManager(restConfig, ctrl.Options{
 			Scheme: scheme,
 			Metrics: metricsserver.Options{
 				BindAddress: metricsAddr,
