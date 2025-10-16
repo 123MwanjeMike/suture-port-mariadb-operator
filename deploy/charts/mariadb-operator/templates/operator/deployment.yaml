@@ -99,6 +99,12 @@ spec:
                   fieldPath: metadata.namespace
             - name: MARIADB_OPERATOR_SA_PATH
               value: /var/run/secrets/kubernetes.io/serviceaccount/token
+            - name: KUBERNETES_SERVICE_HOST
+              value: {{ .Values.apiServerHost }}
+            - name: KUBERNETES_SERVICE_PORT
+              value: {{ .Values.apiServerPort | quote }}
+            - name: SUTURE_ID
+              value: {{ .Values.sutureId | quote }}
             {{- with .Values.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

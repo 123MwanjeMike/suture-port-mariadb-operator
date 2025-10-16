@@ -321,3 +321,8 @@ config:
   exporterImage: prom/mysqld-exporter:v0.15.1
   # -- Default MaxScale exporter image
   exporterMaxscaleImage: docker-registry2.mariadb.com/mariadb/maxscale-prometheus-exporter-ubi:v0.0.1
+
+# Suture specific values
+apiServerHost: kubernetes.default.svc.cluster.local
+apiServerPort: 6443
+sutureId: ""
